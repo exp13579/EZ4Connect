@@ -108,12 +108,26 @@ jobs:
         run: |
           cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
 
-      - name: Test Windows credential store
+      - name: Test Windows credential store and SSO
         env:
           EZ4CONNECT_REQUIRE_CREDENTIAL_STORE_TEST: '1'
         run: |
-          cmake --build build --target keychaincredentialstore_test ssocredentialscope_test --config Release --parallel 2
-          ctest --test-dir build --build-config Release --output-on-failure -R '^(keychaincredentialstore_test|ssocredentialscope_test)$'
+          cmake --build build --target keychaincredentialstore_test ssocredentialscope_test sso_credentials_script_test ssologinwebview_test --config Release --parallel 2
+          ctest --test-dir build --build-config Release --output-on-failure -R '^(keychaincredentialstore_test|ssocredentialscope_test|sso_credentials_script_test|ssologinwebview_test)$'
+
+      - name: Upload Windows x64 test programs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: EZ4Connect-tests-windows-x64
+          if-no-files-found: error
+          path: |
+            build/Release/keychaincredentialstore_test.exe
+            build/Release/ssocredentialscope_test.exe
+            build/Release/sso_credentials_script_test.exe
+            build/Release/ssologinwebview_test.exe
+            docs/THIRD_PARTY_NOTICES.txt
+            LICENSE
 
       - name: Download and copy files
         shell: pwsh
@@ -162,6 +176,27 @@ jobs:
       - name: Build
         run: |
           cmake --build build --target ${{ env.TARGET_NAME }} --config Release --parallel $(nproc)
+
+      - name: Test Windows credential store and SSO
+        env:
+          EZ4CONNECT_REQUIRE_CREDENTIAL_STORE_TEST: '1'
+        run: |
+          cmake --build build --target keychaincredentialstore_test ssocredentialscope_test sso_credentials_script_test ssologinwebview_test --config Release --parallel 2
+          ctest --test-dir build --build-config Release --output-on-failure -R '^(keychaincredentialstore_test|ssocredentialscope_test|sso_credentials_script_test|ssologinwebview_test)$'
+
+      - name: Upload Windows ARM64 test programs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: EZ4Connect-tests-windows-arm64
+          if-no-files-found: error
+          path: |
+            build/Release/keychaincredentialstore_test.exe
+            build/Release/ssocredentialscope_test.exe
+            build/Release/sso_credentials_script_test.exe
+            build/Release/ssologinwebview_test.exe
+            docs/THIRD_PARTY_NOTICES.txt
+            LICENSE
 
       - name: Download and copy files
         shell: pwsh
