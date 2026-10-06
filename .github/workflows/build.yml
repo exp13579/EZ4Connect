@@ -321,7 +321,7 @@ jobs:
         run: |
           cmake --build build --target keychaincredentialstore_test ssocredentialscope_test --parallel 2
           credential_test_keychain="$RUNNER_TEMP/ez4connect-synthetic.keychain-db"
-          original_default_keychain=$(security default-keychain -d user)
+          read -r original_default_keychain < <(security default-keychain -d user)
           original_default_keychain=${original_default_keychain//\"/}
           original_keychains=()
           while read -r keychain; do
