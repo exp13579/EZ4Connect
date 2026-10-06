@@ -73,7 +73,7 @@ cocoa_qt_prefix=$(cd "$cocoa_qt_prefix" && pwd -P)
 for cocoa_module in Core Gui; do
     cocoa_framework="$cocoa_qt_prefix/lib/Qt$cocoa_module.framework/Versions/A/Qt$cocoa_module"
     [[ -f "$cocoa_framework" ]] || fail "Qt$cocoa_module framework is missing"
-    lipo -verify_arch "$cocoa_arch" "$cocoa_framework" \
+    lipo "$cocoa_framework" -verify_arch "$cocoa_arch" \
         || fail "Qt$cocoa_module does not contain the requested architecture"
 done
 
@@ -127,7 +127,7 @@ cocoa_configure_args=(
 cocoa_plugin="$cocoa_fix_dir/platforms/libqcocoa.dylib"
 [[ -f "$cocoa_plugin" && -x "$cocoa_fix_dir/macos_tray_event_test" ]] \
     || fail 'expected plugin or native regression probe was not produced'
-lipo -verify_arch "$cocoa_arch" "$cocoa_plugin"
+lipo "$cocoa_plugin" -verify_arch "$cocoa_arch"
 "$cocoa_cmake" "-DCOCOA_FIX_PLUGIN=$cocoa_plugin" \
     "-DCOCOA_FIX_MANIFEST=$cocoa_fix_dir/qtbase-source-manifest.txt" \
     -P "$cocoa_repo_dir/cmake/macos-cocoa-tray-fix/VerifyPlugin.cmake"
