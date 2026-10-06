@@ -245,7 +245,21 @@ jobs:
         run: |
           cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
-      - name: Download and copy files
+      - name: Build and test the macOS x64 Cocoa tray fix
+        run: |
+          if [ "$(uname -m)" = arm64 ] && ! arch -x86_64 /usr/bin/true; then
+            echo "x64 tray tests require an Intel runner or an Apple Silicon runner with Rosetta installed." >&2
+            exit 1
+          fi
+          ./scripts/build-macos-cocoa-tray-fix.sh build x86_64
+          cocoa_fix_dir="$PWD/build/macos-cocoa-tray-fix"
+          qt_prefix="$(qmake -query QT_INSTALL_PREFIX)"
+          TRAY_TEST_PLUGIN_ROOT="$cocoa_fix_dir" \
+          TRAY_TEST_FRAMEWORK_ROOT="$qt_prefix/lib" \
+          DYLD_FRAMEWORK_PATH="$qt_prefix/lib" \
+            "$cocoa_fix_dir/macos_tray_event_test"
+
+      - name: Deploy and test the packaged macOS x64 app
         run: |
           ./scripts/deploy-macos.sh "${{ env.TARGET_NAME }}" "build" "x86_64" "${{ github.event_name == 'workflow_dispatch' && inputs.zju_connect_nightly }}"
 
@@ -350,6 +364,16 @@ jobs:
         run: |
           cmake --build build --target ${{ env.TARGET_NAME }} --parallel $(nproc)
 
+      - name: Build and test the macOS ARM64 Cocoa tray fix
+        run: |
+          ./scripts/build-macos-cocoa-tray-fix.sh build arm64
+          cocoa_fix_dir="$PWD/build/macos-cocoa-tray-fix"
+          qt_prefix="$(qmake -query QT_INSTALL_PREFIX)"
+          TRAY_TEST_PLUGIN_ROOT="$cocoa_fix_dir" \
+          TRAY_TEST_FRAMEWORK_ROOT="$qt_prefix/lib" \
+          DYLD_FRAMEWORK_PATH="$qt_prefix/lib" \
+            "$cocoa_fix_dir/macos_tray_event_test"
+
       - name: Test macOS credential store in a temporary keychain
         env:
           EZ4CONNECT_REQUIRE_CREDENTIAL_STORE_TEST: '1'
@@ -375,7 +399,7 @@ jobs:
           security default-keychain -d user -s "$credential_test_keychain"
           ctest --test-dir build --output-on-failure -R '^(keychaincredentialstore_test|ssocredentialscope_test)$'
 
-      - name: Download and copy files
+      - name: Deploy and test the packaged macOS ARM64 app
         run: |
           ./scripts/deploy-macos.sh "${{ env.TARGET_NAME }}" "build" "arm64" "${{ github.event_name == 'workflow_dispatch' && inputs.zju_connect_nightly }}"
 

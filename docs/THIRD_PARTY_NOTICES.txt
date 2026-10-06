@@ -27,3 +27,21 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Qt 6.10.3 Cocoa platform plugin (macOS distributions only)
+https://github.com/qt/qtbase/tree/v6.10.3/src/plugins/platforms/cocoa
+
+The macOS package includes a source-built Cocoa platform plugin with the tray
+event guard backported from Qt commit 6192d9edd00caa14ed6b67c32c0cd8cfe95cf815:
+https://github.com/qt/qtbase/commit/6192d9edd00caa14ed6b67c32c0cd8cfe95cf815
+
+Copyright (C) 2016 The Qt Company Ltd.
+Copyright (C) 2012 Klaralvdalens Datakonsult AB, a KDAB Group company, info@kdab.com, author Christoph Schleifenbaum <christoph.schleifenbaum@kdab.com>
+Copyright (c) 2007-2008, Apple, Inc.
+
+The plugin contains Qt code offered under LGPL-3.0-only, GPL-2.0-only, or
+GPL-3.0-only, together with BSD-3-Clause Cocoa tray code. The exact source URL,
+archive checksum, build configuration, applied patch, and full license texts
+are included in Contents/Resources/qt-cocoa-tray-fix of the macOS application.
+See docs/macos-cocoa-tray-fix.md in the project source for rebuilding details.

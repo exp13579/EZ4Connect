@@ -55,6 +55,8 @@
 
 构建需要 CMake 3.16 及以上和 Qt 6.5 及以上。CMake 下载校验过的 QtKeychain 0.17.0 源码并静态链接；Linux 还需要 Qt DBus、pkg-config 和 libsecret 开发包（Debian/Ubuntu：`libsecret-1-dev`）。离线构建可使用 `-DFETCHCONTENT_SOURCE_DIR_QTKEYCHAIN=/path/to/qtkeychain` 指向相同版本的源码。
 
+macOS 官方打包使用 Qt 6.10.3，并从同版源码回补 macOS 27 的 Cocoa 托盘兼容问题；构建、许可证和回归验证见 [macOS 托盘修复说明](docs/macos-cocoa-tray-fix.md)。
+
 ## 许可证
 
 本项目遵循 [GNU General Public License Version 3](LICENSE) 开源。
