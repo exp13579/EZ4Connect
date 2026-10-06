@@ -12,6 +12,7 @@ APP_PATH="$TARGET_NAME.app"
 
 # Copy app bundle
 cp -R "$BUILD_DIR/$TARGET_NAME.app" .
+cp docs/THIRD_PARTY_NOTICES.txt "$APP_PATH/Contents/Resources/"
 
 # Download and extract zju-connect
 ZJU_ARCH="${ARCH}"

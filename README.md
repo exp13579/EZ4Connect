@@ -46,11 +46,14 @@
 - [X] 支持手动设置 Proxy Bypass
 - [X] 上传 AUR 包
 - [ ] 使用密钥链存储密码等信息
+  - SSO 网页账号密码已支持 Windows、macOS、Linux 系统凭据库保存、自动填充和删除，见 [SSO 凭据保存说明](docs/sso-credentials.md)。普通 VPN 密码、证书密码和 TOTP 的配置存储尚未迁移。
 
 ## 开发
 
 项目的分层、依赖方向和新增代码归属规则见
 [架构说明](docs/ARCHITECTURE.md)。
+
+构建需要 CMake 3.16 及以上和 Qt 6.5 及以上。CMake 下载校验过的 QtKeychain 0.17.0 源码并静态链接；Linux 还需要 Qt DBus、pkg-config 和 libsecret 开发包（Debian/Ubuntu：`libsecret-1-dev`）。离线构建可使用 `-DFETCHCONTENT_SOURCE_DIR_QTKEYCHAIN=/path/to/qtkeychain` 指向相同版本的源码。
 
 ## 许可证
 
